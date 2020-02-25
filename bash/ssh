@@ -1,0 +1,23 @@
+# local to remote: scp-via luiz.nunes@hpc.ufabc.edu.br LICENSE.txt luiz.nunes@titanio.ufabc.int.br:/home/luiz.nunes/
+#
+# remote to local: scp-via luiz.nunes@hpc.ufabc.edu.br luiz.nunes@titanio.ufabc.int.br:/home/luiz.nunes/LICENSE.txt .
+#
+
+_ssx_via(){
+  COMMAND=${1}
+  gateway=${2}
+  shift; shift
+  $COMMAND -o "ProxyCommand=ssh ${gateway} -W %h:%p" -o "StrictHostKeyChecking=no" $*
+}
+
+_ssh_via(){
+  _ssx_via 'ssh' $*
+}
+
+_scp_via(){
+  _ssx_via 'scp' $*
+}
+
+
+alias ssh-via=_ssh_via
+alias scp-via=_scp_via
